@@ -1,8 +1,10 @@
 import React from 'react';
 import './Home.css';
-import '../../App.css';
 import Slideshow from "react-slidez";
-import Logo from '../../images/mylogo2.png'
+import Logo from '../../images/mylogo2.png';
+import Logo1 from '../../images/mylogo1.png'
+import { Modal } from 'react-bootstrap';
+
 
 
 class Home extends React.Component {
@@ -15,8 +17,21 @@ class Home extends React.Component {
                 'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=f9b9cb51ea58b136b1ccfc012192afcc&w=1000&q=80',
                 'https://images.unsplash.com/photo-1531206715517-5c0ba140b2b8?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=044e5d85cd16e79671287971a06be066&w=1000&q=80'
             ],
+            show: false
         }
+        this.handleClose = this.handleClose.bind(this);
+        this.handleShow = this.handleShow.bind(this);
     }
+
+
+    handleClose() {
+        this.setState({ show: false });
+    }
+
+    handleShow() {
+        this.setState({ show: true });
+    }
+
 
     render() {
         const { images } = this.state;
@@ -40,9 +55,21 @@ class Home extends React.Component {
                         Stay for what you discover.
                     </div>
                     <div className="heading-child2">
-                        <div className="get-started-btn">
+                        <div className="get-started-btn" onClick={this.handleShow}>
                             Get Started
                         </div>
+                        <Modal show={this.state.show} onHide={this.handleClose} >
+                            <Modal.Body>
+                                <div className="div-logo-modal">
+                                    <img src={Logo1} alt="" />
+                                </div>
+                                <div>
+                                    <div className="div-modal-btn">
+                                    <i className="fa fa-facebook-official" style={{fontSize:"28px",position:'relative',top:'4px'}}></i> LOG IN WITH FACEBOOK
+                                    </div>
+                                </div>
+                            </Modal.Body>
+                        </Modal>
                     </div>
                 </div>
             </div>

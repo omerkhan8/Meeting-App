@@ -52,6 +52,33 @@
     border-color: rgb(253, 33, 99);
 }
 
+.div-logo-modal{
+    text-align: center;
+}
+.div-logo-modal img{
+    width: 200px;
+    height: 200px;
+}
+
+.div-modal-btn{
+    width: 280px;
+    height: 50px;
+    margin:0 auto;
+    /* border-style: solid;
+    border-width: 0.5px; */
+    border-radius: 10px;
+    background-color: #38489A;
+    color: white;
+    text-align: center;
+    line-height: 50px;
+    font-size: 1.2em;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+    cursor: pointer;
+}
+.div-modal-btn:hover{
+    background-color: rgb(44, 62, 151);
+}
 
 @media(max-width:870px){
     
@@ -64,5 +91,8 @@
     }
     .heading-child1{
         font-size: 1.3em;
+    }
+    .div-modal-btn{
+        width: 270px;
     }
 }
