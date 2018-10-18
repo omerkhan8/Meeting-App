@@ -2,10 +2,12 @@ import React from 'react';
 import './Home.css';
 import Slideshow from "react-slidez";
 import Logo from '../../images/mylogo2.png';
-import Logo1 from '../../images/mylogo1.png'
+import Logo1 from '../../images/mylogo1.png';
 import { Modal } from 'react-bootstrap';
+import firebase from '../../config/firebase';
 
 
+var provider = new firebase.auth.FacebookAuthProvider();
 
 class Home extends React.Component {
 
@@ -30,6 +32,26 @@ class Home extends React.Component {
 
     handleShow() {
         this.setState({ show: true });
+    }
+
+    fbLogin() {
+        firebase.auth().signInWithPopup(provider).then(function (result) {
+            // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+            var token = result.credential.accessToken;
+            // The signed-in user info.
+            var user = result.user;
+            console.log(user);
+            // ...
+        }).catch(function (error) {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            // The email of the user's account used.
+            var email = error.email;
+            // The firebase.auth.AuthCredential type that was used.
+            var credential = error.credential;
+            // ...
+        });
     }
 
 
@@ -64,8 +86,8 @@ class Home extends React.Component {
                                     <img src={Logo1} alt="" />
                                 </div>
                                 <div>
-                                    <div className="div-modal-btn">
-                                    <i className="fa fa-facebook-official" style={{fontSize:"28px",position:'relative',top:'4px'}}></i> LOG IN WITH FACEBOOK
+                                    <div className="div-modal-btn" onClick={() => this.fbLogin()}>
+                                        <i className="fa fa-facebook-official" style={{ fontSize: "28px", position: 'relative', top: '4px' }}></i> LOG IN WITH FACEBOOK
                                     </div>
                                 </div>
                             </Modal.Body>
