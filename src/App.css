@@ -3,6 +3,10 @@
   font-family:  'Times New Roman', Times, serif;
 }
 
+body,html{
+  background-color: white !important;
+}
+
 .row{
   width: 100%;
 }
