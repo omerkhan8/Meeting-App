@@ -8,6 +8,8 @@ import firebase from '../../config/firebase';
 
 
 var provider = new firebase.auth.FacebookAuthProvider();
+const db = firebase.database();
+const auth = firebase.auth();
 
 class Home extends React.Component {
 
@@ -40,16 +42,33 @@ class Home extends React.Component {
 
     fbLogin() {
         firebase.auth().signInWithPopup(provider).then(function (result) {
-            var token = result.credential.accessToken;
-            console.log('result***', result);
-            console.log('token***', token);
+            // var token = result.credential.accessToken;
             var user = result.user;
-            console.log('user****', user);
+            console.log(user);
+            const userObj = {
+                name: user.displayName,
+                email: user.email,
+                profilePic: user.photoURL,
+                userId: user.uid
+            };
+            return db.ref(`Users/${user.uid}/Data`).set(userObj);
+
+        }).then(() => {
+            db.ref(`Users/${auth.currentUser.uid}/Profile`).once('value').then((snap) => {
+                let data = snap.val()
+                if (data === null) {
+                    this.props.history.push('/profile');
+                }
+                else {
+                    this.props.history.push('/dashboard');
+                }
+            })
         }).catch(function (error) {
-            var errorCode = error.code;
-            var errorMessage = error.message;
-            var email = error.email;
-            var credential = error.credential;
+            // var errorCode = error.code;
+            // var errorMessage = error.message;
+            // var email = error.email;
+            // var credential = error.credential;
+            console.log(error);
         });
     }
 
@@ -89,6 +108,7 @@ class Home extends React.Component {
                                         <i className="fa fa-facebook-official" style={{ fontSize: "28px", position: 'relative', top: '4px' }}></i> LOG IN WITH FACEBOOK
                                     </div>
                                 </div>
+                                <button onClick={() => { auth.signOut() }}>logout</button>
                             </Modal.Body>
                         </Modal>
                     </div>
