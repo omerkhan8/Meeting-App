@@ -1,14 +1,18 @@
 import React from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
-import Home from '../screens/Home/Home';
+import firebase from './firebase';
+import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
+import * as Screens from '../screens';
 const Routes = () => {
     return (
         <Router>
             <div>
-                <Route exact path="/" component={Home} />
+                <Route exact path="/" component={Screens.Home} />
+                <Privateroute path="/profile" component={Screens.Profile} />
+                <Privateroute path="/dashboard" component={Screens.Dashboard} />
             </div>
         </Router>
     )
 }
 
 export default Routes;
+
