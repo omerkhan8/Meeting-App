@@ -3,6 +3,7 @@ import { Thumbnail, ProgressBar } from 'react-bootstrap';
 import firebase from 'firebase';
 import FileUploader from "react-firebase-file-uploader";
 import '../App.css';
+import image from 'react-firebase-file-uploader/lib/utils/image';
 
 
 class Picture extends React.Component {
@@ -15,7 +16,8 @@ class Picture extends React.Component {
             progress: null,
             imageUrl: ['https://react-bootstrap.github.io/thumbnaildiv.png'
                 , 'https://react-bootstrap.github.io/thumbnaildiv.png',
-                'https://react-bootstrap.github.io/thumbnaildiv.png']
+                'https://react-bootstrap.github.io/thumbnaildiv.png'],
+            error: false
         }
 
         // this.uploadStart = this.uploadStart.bind(this);
@@ -41,8 +43,25 @@ class Picture extends React.Component {
             })
     }
 
+    submit() {
+        const { imageUrl, imageUploaded, error } = this.state;
+        let temp = 0;
+        for (let images of imageUploaded) {
+            if (images) {
+                temp++;
+            }
+        }
+        if (temp === 3) {
+            this.props.picNext(imageUrl);
+            this.setState({ error: false })
+        }
+        else {
+            this.setState({ error: true })
+        }
+    }
+
     render() {
-        const { imageUrl, isUploading, progress, currIndex, imageUploaded } = this.state;
+        const { imageUrl, isUploading, progress, currIndex, imageUploaded, error } = this.state;
         console.log(this.state);
         return (
             <div>
@@ -71,8 +90,9 @@ class Picture extends React.Component {
                 )}
 
                 <div style={{ clear: 'both' }}>
+                    {error && <div><p className="validation-error">Please upload all images*</p></div>}
                     <div style={{ position: 'relative', top: '8px' }}>
-                        <div className="pf-next-btn">
+                        <div className="pf-next-btn" onClick={() => this.submit()}>
                             Next
                         </div>
                     </div>
