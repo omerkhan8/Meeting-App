@@ -1,14 +1,20 @@
 import React from 'react';
 import firebase from '../../config/firebase';
-import Navbar from '../../components/Navbar';
 import './Profile.css';
 import Loader from 'react-loader-spinner';
-import Biodata from '../../components/Biodata';
-import Picture from '../../components/Picture';
-import Details from '../../components/Details';
+import * as Custom from '../../components';
+import checkUser from '../../Helpers/Authchecker';
+import swal from 'sweetalert2';
 
 const db = firebase.database();
 const auth = firebase.auth();
+const toast = swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 3000,
+    customClass: 'swal-font'
+});
 
 class Profile extends React.Component {
     constructor(props) {
@@ -19,20 +25,26 @@ class Profile extends React.Component {
             Bio: true,
             Pic: false,
             Detail: false,
-            step: 1
+            map: false,
+            step: 1,
         }
         this.bioNext = this.bioNext.bind(this);
         this.picNext = this.picNext.bind(this);
         this.detailNext = this.detailNext.bind(this);
+        this.mapNext = this.mapNext.bind(this);
     }
 
     componentDidMount() {
-        auth.onAuthStateChanged((user) => {
-            if (user) {
+        checkUser()
+            .then(user => {
                 db.ref(`Users/${auth.currentUser.uid}/Profile`).once('value')
                     .then((snap) => {
                         let data = snap.val();
                         if (data !== null) {
+                            toast({
+                                type: 'warning',
+                                title: 'Profile already created'
+                            })
                             this.props.history.replace('/dashboard');
                         }
                         else {
@@ -45,11 +57,8 @@ class Profile extends React.Component {
                         }
                     })
 
-            } else {
-                alert('please login first')
-                this.props.history.replace('/');
-            }
-        });
+            })
+            .catch(() => this.props.history.replace('/'))
 
     }
 
@@ -66,16 +75,31 @@ class Profile extends React.Component {
 
     detailNext(selectedBeverages, selectedDuration) {
         let { step } = this.state;
-        this.setState({ selectedBeverages, selectedDuration, Detail: false, step: step + 1 });
+        this.setState({ selectedBeverages, selectedDuration, Detail: false, map: true, step: step + 1 });
 
     }
 
+    async mapNext(location) {
+        await this.setState({ location })
+        const { nickName, number, imageUrl, selectedDuration, selectedBeverages } = this.state;
+        let profileData = { nickName, number, imageUrl, selectedBeverages, selectedDuration, location };
+        db.ref(`Users/${auth.currentUser.uid}/Profile`).set(profileData)
+            .then(() => {
+                toast({
+                    type: 'success',
+                    title: 'Profile created successfully'
+                })
+                this.props.history.push('/dashboard');
+
+            })
+    }
+
     render() {
-        const { userData, loader, Bio, Pic, Detail, step } = this.state;
+        const { userData, loader, Bio, Pic, Detail, step, map } = this.state;
         console.log(this.state)
         return (
             <div>
-                <Navbar />
+                <Custom.Navbar />
                 {loader &&
                     <div className="loader-div">
                         <Loader
@@ -92,17 +116,20 @@ class Profile extends React.Component {
                                 <div className="pf-heading-div">Welcome</div>
                                 <div className="pf-heading1-div">Omer Khan</div>
                                 <div className="pf-para-div">Please complete your profile before starting.</div>
-                                <div className="pf-para1-div">Step {step}/3</div>
+                                <div className="pf-para1-div">Step {step}/4</div>
                                 <div>
                                     {Bio && <div className="pf-content-div">
-                                        <Biodata bioNext={this.bioNext} />
+                                        <Custom.Biodata bioNext={this.bioNext} />
                                     </div>}
 
                                     {Pic && <div className="pf-content1-div">
-                                        <Picture picNext={this.picNext} />
+                                        <Custom.Picture picNext={this.picNext} />
                                     </div>}
-                                    {Detail &&<div className="pf-content2-div">
-                                        <Details detailNext={this.detailNext} />
+                                    {Detail && <div className="pf-content2-div">
+                                        <Custom.Details detailNext={this.detailNext} />
+                                    </div>}
+                                    {map && <div className="pf-content3-div">
+                                        <Custom.Map mapNext={this.mapNext} />
                                     </div>}
                                 </div>
                             </div>
@@ -117,3 +144,28 @@ class Profile extends React.Component {
 }
 
 export default Profile;
+
+
+// auth.onAuthStateChanged((user) => {
+//     if (user) {
+//         db.ref(`Users/${auth.currentUser.uid}/Profile`).once('value')
+//             .then((snap) => {
+//                 let data = snap.val();
+//                 if (data !== null) {
+//                     this.props.history.replace('/dashboard');
+//                 }
+//                 else {
+//                     console.log("please creat your profile to get started!");
+//                     db.ref(`Users/${auth.currentUser.uid}/Data`).once('value')
+//                         .then((data) => {
+//                             let userData = data.val();
+//                             this.setState({ userData, loader: false })
+//                         })
+//                 }
+//             })
+
+//     } else {
+//         alert('please login first')
+//         this.props.history.replace('/');
+//     }
+// });

@@ -5,11 +5,20 @@ import Logo from '../../images/mylogo2.png';
 import Logo1 from '../../images/mylogo1.png';
 import { Modal } from 'react-bootstrap';
 import firebase from '../../config/firebase';
+import swal from 'sweetalert2';
+import checkUser from '../../Helpers/Authchecker';
 
 
 var provider = new firebase.auth.FacebookAuthProvider();
 const db = firebase.database();
 const auth = firebase.auth();
+const toast = swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 3000,
+    customClass: 'swal-font'
+});
 
 class Home extends React.Component {
 
@@ -29,6 +38,11 @@ class Home extends React.Component {
 
     componentDidMount() {
         document.getElementById('slidshow-parent').firstChild.style.backgroundColor = '#333';
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                this.props.history.replace('/dashboard');
+            }
+        })
     }
 
 
@@ -54,6 +68,10 @@ class Home extends React.Component {
             return db.ref(`Users/${user.uid}/Data`).set(userObj);
 
         }).then(() => {
+            toast({
+                type: 'success',
+                title: 'Signed in successfully'
+            })
             db.ref(`Users/${auth.currentUser.uid}/Profile`).once('value').then((snap) => {
                 let data = snap.val()
                 if (data === null) {
@@ -108,7 +126,6 @@ class Home extends React.Component {
                                         <i className="fa fa-facebook-official" style={{ fontSize: "28px", position: 'relative', top: '4px' }}></i> LOG IN WITH FACEBOOK
                                     </div>
                                 </div>
-                                <button onClick={() => { auth.signOut() }}>logout</button>
                             </Modal.Body>
                         </Modal>
                     </div>
