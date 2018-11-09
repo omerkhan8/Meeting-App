@@ -2,7 +2,7 @@ import React from 'react';
 import { Thumbnail, ProgressBar } from 'react-bootstrap';
 import firebase from 'firebase';
 import FileUploader from "react-firebase-file-uploader";
-import '../App.css';
+import '../../App.css';
 import image from 'react-firebase-file-uploader/lib/utils/image';
 
 

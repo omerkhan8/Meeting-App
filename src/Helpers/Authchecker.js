@@ -3,6 +3,7 @@ import swal from 'sweetalert2';
 
 
 const auth = firebase.auth();
+const db = firebase.database();
 const toast = swal.mixin({
     toast: true,
     position: 'top-end',
@@ -27,4 +28,21 @@ function checkUser() {
     })
 }
 
-export default checkUser;
+function checkProfile(user) {
+    return new Promise((res, rej) => {
+
+        db.ref(`Users/${user.uid}/Profile`).once('value')
+            .then(snap => {
+                if (snap.val() === null) {
+                    res('profile not created');
+                }
+                else {
+                    rej('profile created');
+                }
+            })
+
+
+    })
+}
+
+export { checkUser, checkProfile };

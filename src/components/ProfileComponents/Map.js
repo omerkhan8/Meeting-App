@@ -32,10 +32,7 @@ class Map extends React.Component {
 
     submit() {
         const { coords } = this.state;
-        let location = {
-            longitude: coords.longitude,
-            latitude: coords.latitude
-        }
+        let location = [coords.latitude, coords.longitude];
         this.props.mapNext(location);
     }
 

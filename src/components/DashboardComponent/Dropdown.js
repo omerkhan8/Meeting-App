@@ -1,8 +1,8 @@
 import React from 'react';
-import '../App.css';
+import '../../App.css';
 import { ButtonToolbar, DropdownButton, MenuItem } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import firebase from '../config/firebase';
+import firebase from '../../config/firebase';
 
 const auth = firebase.auth();
 

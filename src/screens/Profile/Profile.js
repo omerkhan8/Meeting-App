@@ -3,7 +3,7 @@ import firebase from '../../config/firebase';
 import './Profile.css';
 import Loader from 'react-loader-spinner';
 import * as Custom from '../../components';
-import checkUser from '../../Helpers/Authchecker';
+import { checkUser } from '../../Helpers/Authchecker';
 import swal from 'sweetalert2';
 
 const db = firebase.database();
@@ -27,6 +27,7 @@ class Profile extends React.Component {
             Detail: false,
             map: false,
             step: 1,
+            uid: null
         }
         this.bioNext = this.bioNext.bind(this);
         this.picNext = this.picNext.bind(this);
@@ -37,6 +38,7 @@ class Profile extends React.Component {
     componentDidMount() {
         checkUser()
             .then(user => {
+                this.setState({ uid: user.uid })
                 db.ref(`Users/${auth.currentUser.uid}/Profile`).once('value')
                     .then((snap) => {
                         let data = snap.val();
@@ -81,8 +83,8 @@ class Profile extends React.Component {
 
     async mapNext(location) {
         await this.setState({ location })
-        const { nickName, number, imageUrl, selectedDuration, selectedBeverages } = this.state;
-        let profileData = { nickName, number, imageUrl, selectedBeverages, selectedDuration, location };
+        const { nickName, number, imageUrl, selectedDuration, selectedBeverages, uid } = this.state;
+        let profileData = { nickName, number, imageUrl, selectedBeverages, selectedDuration, location, uid };
         db.ref(`Users/${auth.currentUser.uid}/Profile`).set(profileData)
             .then(() => {
                 toast({

@@ -1,5 +1,5 @@
 import React from 'react';
-import '../App.css';
+import '../../App.css';
 import { Checkbox } from 'react-bootstrap';
 
 class Details extends React.Component {
