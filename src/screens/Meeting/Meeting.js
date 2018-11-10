@@ -5,6 +5,7 @@ import { checkUser, checkProfile } from '../../Helpers/Authchecker';
 import swal from 'sweetalert2';
 import Profile from '../Profile/Profile';
 import Geofire from 'geofire';
+import { Alert } from 'react-bootstrap';
 
 const auth = firebase.auth();
 const toast = swal.mixin({
@@ -21,7 +22,9 @@ class Meeting extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            currUser: null
+            currUser: null,
+            criteriaUsers: null
+
         }
     }
 
@@ -50,8 +53,7 @@ class Meeting extends React.Component {
                                     return values
                                 }
                             })
-                            console.log(criteriaUsers);
-
+                            this.setState({ criteriaUsers });
 
                         }
                         else {
@@ -66,11 +68,23 @@ class Meeting extends React.Component {
 
 
     render() {
+        const { criteriaUsers } = this.state;
         return (
             <div>
                 <Navbar>
                     <Dropdown history={this.props.history} />
                 </Navbar>
+
+                {criteriaUsers && criteriaUsers.length === 0 &&
+                    <div>
+                        <div className="das-alert">
+                            <Alert bsStyle="danger">Currently no one in your area using this App <br/> Share with your friends.</Alert>
+                        </div>
+                    </div>
+                }
+                
+
+
 
             </div>
         )
@@ -79,13 +93,3 @@ class Meeting extends React.Component {
 }
 
 export default Meeting;
-
-
-// let locationDistance = Geofire.distance(currentUser.location, allUsers[0].location);
-// console.log(`geofire ${locationDistance}`);
-// if (locationDistance <= 5) {
-//     console.log('can meet')
-// }
-// else {
-//     console.log('too far away')
-// }
