@@ -54,6 +54,7 @@ class Meeting extends React.Component {
                                 }
                             })
                             this.setState({ criteriaUsers });
+                            console.log(criteriaUsers);
 
                         }
                         else {
@@ -78,11 +79,11 @@ class Meeting extends React.Component {
                 {criteriaUsers && criteriaUsers.length === 0 &&
                     <div>
                         <div className="das-alert">
-                            <Alert bsStyle="danger">Currently no one in your area using this App <br/> Share with your friends.</Alert>
+                            <Alert bsStyle="danger">Currently no one in your area using this App <br /> Share with your friends.</Alert>
                         </div>
                     </div>
                 }
-                
+
 
 
 

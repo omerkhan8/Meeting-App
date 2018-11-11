@@ -116,7 +116,7 @@ class Profile extends React.Component {
                         <div className="get-start-div">
                             <div>
                                 <div className="pf-heading-div">Welcome</div>
-                                <div className="pf-heading1-div">Omer Khan</div>
+                                <div className="pf-heading1-div">{userData.name}</div>
                                 <div className="pf-para-div">Please complete your profile before starting.</div>
                                 <div className="pf-para1-div">Step {step}/4</div>
                                 <div>
