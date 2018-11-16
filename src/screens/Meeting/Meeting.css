@@ -1,0 +1,48 @@
+.floatingBtn{
+    width: 60px;
+    height: 60px;
+    text-align: center;
+    line-height: 66px;
+    border-radius: 50%;
+    position: fixed;
+    bottom: 20px;
+    right:10px;
+    cursor: pointer; 
+    background-color: #4CAF50;
+}
+
+.left{
+    left:10px ;
+    background-color: rgb(223, 1, 1);
+}
+
+.floatingBtn:hover{
+    background-color: rgb(46, 192, 51);
+}
+.left:hover{
+    background-color: rgb(190, 2, 2);
+}
+
+.user-name-div{
+    position: fixed;
+    left :30%;
+    margin-top: 20px;
+    font-size: 2.3em;
+}
+
+.nickName-div{
+    font-size: 1.4em;
+    position: fixed;
+    margin-top: 70px;
+    left: 45%;
+}
+
+
+@media(max-width:350px){
+    .user-name-div{
+        left: 24%;
+    }
+    .nickName-div{
+        left: 40%;
+    }
+}
