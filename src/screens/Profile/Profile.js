@@ -83,8 +83,8 @@ class Profile extends React.Component {
 
     async mapNext(location) {
         await this.setState({ location })
-        const { nickName, number, imageUrl, selectedDuration, selectedBeverages, uid } = this.state;
-        let profileData = { nickName, number, imageUrl, selectedBeverages, selectedDuration, location, uid };
+        const { nickName, number, imageUrl, selectedDuration, selectedBeverages, uid, userData } = this.state;
+        let profileData = { nickName, number, imageUrl, selectedBeverages, selectedDuration, location, uid, name: userData.name };
         db.ref(`Users/${auth.currentUser.uid}/Profile`).set(profileData)
             .then(() => {
                 toast({

@@ -1,11 +1,12 @@
 import React from 'react';
-import { Navbar, Dropdown } from '../../components';
+import './Meeting.css';
+import { Navbar, Dropdown, ResCards } from '../../components';
 import firebase from '../../config/firebase';
 import { checkUser, checkProfile } from '../../Helpers/Authchecker';
 import swal from 'sweetalert2';
-import Profile from '../Profile/Profile';
 import Geofire from 'geofire';
 import { Alert } from 'react-bootstrap';
+// import Profile from '../Profile/Profile';
 
 const auth = firebase.auth();
 const toast = swal.mixin({
@@ -24,7 +25,6 @@ class Meeting extends React.Component {
         this.state = {
             currUser: null,
             criteriaUsers: null
-
         }
     }
 
@@ -47,14 +47,19 @@ class Meeting extends React.Component {
                             const { currentUser, allUsers } = this.props.location.state;
                             let criteriaUsers = allUsers.filter((values, index) => {
                                 let distance = Geofire.distance(currentUser.location, values.location);
+                                console.log(distance)
                                 let beverages = currentUser.selectedBeverages.find(bev => values.selectedBeverages.find(bev2 => bev === bev2));
                                 let duration = currentUser.selectedDuration.find(dur => values.selectedDuration.find(dur2 => dur === dur2));
                                 if (distance <= 5 && beverages && duration) {
-                                    return values
+                                    let imagesArray = values.imageUrl.map(items => {
+                                        return { original: items }
+                                    })
+                                    values.imagesArray = imagesArray;
+                                    return values;
                                 }
                             })
-                            this.setState({ criteriaUsers });
-                            console.log(criteriaUsers);
+                            this.setState({ criteriaUsers }, () => console.log(criteriaUsers));
+
 
                         }
                         else {
@@ -79,8 +84,15 @@ class Meeting extends React.Component {
                 {criteriaUsers && criteriaUsers.length === 0 &&
                     <div>
                         <div className="das-alert">
-                            <Alert bsStyle="danger">Currently no one in your area using this App <br /> Share with your friends.</Alert>
+                            <Alert bsStyle="danger">Currently no one near to you is using this App <br /> Tell your friends about this Application.</Alert>
                         </div>
+                    </div>
+                }
+
+                {
+                    criteriaUsers && criteriaUsers.length > 0 &&
+                    <div>
+                        <ResCards criteriaUsers={criteriaUsers} />
                     </div>
                 }
 

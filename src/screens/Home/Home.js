@@ -37,12 +37,15 @@ class Home extends React.Component {
     }
 
     componentDidMount() {
-        document.getElementById('slidshow-parent').firstChild.style.backgroundColor = '#333';
+        this.SlierDiv.firstChild.style.backgroundColor = '#333';
+
+        // document.getElementById('slidshow-parent').firstChild.style.backgroundColor = '#333';
         // auth.onAuthStateChanged(user => {
         //     if (user) {
         //         this.props.history.replace('/dashboard');
         //     }
         // })
+
     }
 
 
@@ -94,7 +97,8 @@ class Home extends React.Component {
     render() {
         const { images } = this.state;
         return (
-            <div id="slidshow-parent">
+            // <div id="slidshow-parent">
+            <div ref={el => this.SlierDiv = el}>
                 <Slideshow
                     slides={images}
                     showArrows={false}
@@ -130,7 +134,7 @@ class Home extends React.Component {
                         </Modal>
                     </div>
                 </div>
-            </div>
+            </div >
         )
     }
 }
