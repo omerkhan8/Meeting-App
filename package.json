@@ -10,10 +10,12 @@
     "react-dom": "^16.5.2",
     "react-firebase-file-uploader": "^2.4.2",
     "react-google-maps": "^9.4.5",
+    "react-image-gallery": "^0.8.12",
     "react-loader-spinner": "^2.0.6",
     "react-router-dom": "^4.3.1",
     "react-scripts": "2.0.5",
     "react-slidez": "0.0.30",
+    "react-swipeable-cards": "^1.0.6",
     "sweetalert2": "^7.28.11"
   },
   "scripts": {
