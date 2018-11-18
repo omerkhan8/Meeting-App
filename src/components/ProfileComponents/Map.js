@@ -17,8 +17,6 @@ class Map extends React.Component {
         this.setPosition();
     }
 
-
-
     setPosition() {
         navigator.geolocation.getCurrentPosition(position => {
             this.setState({ coords: position.coords });
@@ -62,8 +60,6 @@ class Map extends React.Component {
         )
     }
 }
-
-
 
 
 const MyMapComponent = withScriptjs(withGoogleMap((props) =>

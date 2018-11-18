@@ -6,6 +6,7 @@ import { checkUser, checkProfile } from '../../Helpers/Authchecker';
 import swal from 'sweetalert2';
 import Geofire from 'geofire';
 import { Alert } from 'react-bootstrap';
+import Loader from 'react-loader-spinner';
 // import Profile from '../Profile/Profile';
 
 const auth = firebase.auth();
@@ -23,9 +24,11 @@ class Meeting extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            loader: true,
             currUser: null,
             criteriaUsers: null
         }
+        this.sendMeetingReq = this.sendMeetingReq.bind(this);
     }
 
     componentDidMount() {
@@ -58,7 +61,7 @@ class Meeting extends React.Component {
                                     return values;
                                 }
                             })
-                            this.setState({ criteriaUsers }, () => console.log(criteriaUsers));
+                            this.setState({ criteriaUsers, loader: false }, () => console.log(criteriaUsers));
 
 
                         }
@@ -71,15 +74,26 @@ class Meeting extends React.Component {
             .catch(() => this.props.history.replace('/'))
     }
 
+    sendMeetingReq(data) {
+        this.props.history.push('/dashboard/meeting/location', { data })
+    }
+
 
 
     render() {
-        const { criteriaUsers } = this.state;
+        const { criteriaUsers, loader } = this.state;
         return (
             <div>
                 <Navbar>
                     <Dropdown history={this.props.history} />
                 </Navbar>
+
+                {loader && <div className="loader-div">
+                    <Loader
+                        type="Puff"
+                        color="#FD5D62"
+                    />
+                </div>}
 
                 {criteriaUsers && criteriaUsers.length === 0 &&
                     <div>
@@ -92,7 +106,12 @@ class Meeting extends React.Component {
                 {
                     criteriaUsers && criteriaUsers.length > 0 &&
                     <div>
-                        <ResCards criteriaUsers={criteriaUsers} />
+                        <div className="meet-heading-div">
+                            Swap <span style={{ color: '#4CAF50' }}>Right</span> to Send a Request, <br />
+                            Swap <span style={{ color: 'rgb(223, 1, 1)' }}>Left</span> to cancel. <br />
+                            or use the buttons.
+                        </div>
+                        <ResCards criteriaUsers={criteriaUsers} sendMeetingReq={this.sendMeetingReq} />
                     </div>
                 }
 
