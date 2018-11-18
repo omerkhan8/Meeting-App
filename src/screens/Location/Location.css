@@ -1,0 +1,84 @@
+.loc-first-div{
+    font-size: 2.0em;
+    text-align: center;
+    margin-top: 15px;
+}
+
+.loc-search-div{
+    width: 60%;
+    margin-top:20px;
+    display: inline-block;
+}
+
+.loc-search-btn{
+        width: 50px;
+        height: 50px;
+        text-align: center;
+        line-height: 55px;
+        border-radius: 50%;
+        cursor: pointer; 
+        background-color: #FD5D62;
+        display: inline-block;
+        position: relative;
+        left: 10px;
+}
+.loc-search-btn:hover{
+    background-color: rgb(223, 73, 78);
+}
+
+/* w3 table css */
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    border: 1px solid #ddd;
+  }
+  
+  /* Style table headers and table data */
+  th, td {
+    text-align: center;
+    padding: 16px;
+  }
+  
+  th:first-child, td:first-child {
+    text-align: left;
+  }
+  
+  /* Zebra-striped table rows */
+  tr:nth-child(even) {
+    background-color: #f2f2f2
+  }
+
+/* w3 table css ends */
+
+#places-para{
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.3em;
+}
+
+.loc-location-div{
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    line-height: 55px;
+    border-radius: 50%;
+    cursor: pointer; 
+    background-color: #BDBDBD;
+    display: inline-block;
+    float:left;
+    /* position: relative;
+    left: 10px; */
+}
+
+.loc-para1{
+    margin: 0;
+}
+
+
+@media(max-width:600px){
+    .loc-search-div{
+        width: 80%;
+    }
+}

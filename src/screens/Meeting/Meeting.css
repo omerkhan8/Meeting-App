@@ -9,6 +9,7 @@
     right:10px;
     cursor: pointer; 
     background-color: #4CAF50;
+    transform: unset !important;
 }
 
 .left{
@@ -28,6 +29,7 @@
     left :30%;
     margin-top: 20px;
     font-size: 2.3em;
+    transform: unset !important;
 }
 
 .nickName-div{
@@ -35,8 +37,32 @@
     position: fixed;
     margin-top: 70px;
     left: 45%;
+    transform: unset !important;
 }
 
+.confirm-meeting{
+    width: 400px;
+    height:200px;
+}
+
+.res-card-btn{
+    transform: unset !important;
+}
+
+.meet-heading-div{
+    /* border-style: solid; */
+    box-sizing: border-box;
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+    font-size: 2em;
+    position: relative;
+    top: 20px;
+}
+
+.custom-swal-meeting{
+    font-size: 1.1em;
+}
 
 @media(max-width:350px){
     .user-name-div{
