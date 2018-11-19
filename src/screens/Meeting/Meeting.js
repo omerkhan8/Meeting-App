@@ -75,7 +75,7 @@ class Meeting extends React.Component {
     }
 
     sendMeetingReq(data) {
-        this.props.history.push('/dashboard/meeting/location', { data })
+        this.props.history.push('/dashboard/meeting/location', { data, currentUser: this.props.location.state.currentUser })
     }
 
 

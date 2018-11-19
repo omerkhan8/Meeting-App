@@ -1,9 +1,13 @@
+/* eslint-disable no-undef */
+/* global google */
+
 import React from 'react';
 import './Location.css';
-import { Navbar, Dropdown } from '../../components';
+import { Navbar, Dropdown, Direction } from '../../components';
 import { checkUser } from '../../Helpers/Authchecker';
 import Loader from 'react-loader-spinner';
 import { FormGroup, FormControl, Button } from 'react-bootstrap';
+import { Modal } from 'react-bootstrap';
 
 
 const CLIENT_ID = 'ADP2LPQPGPOF2RMVGYEEBSBLS2UI5OG3VJZ13HKIP211ZZXQ';
@@ -16,8 +20,13 @@ class Location extends React.Component {
         this.state = {
             currUser: null,
             loader: true,
-            nearByPlaces: null
+            nearByPlaces: null,
+            searchQuery: null,
+            show: false,
+            userLocation: props.location.state.currentUser.location,
+            placeLocation: null
         }
+        this.handleClose = this.handleClose.bind(this);
     }
 
     componentDidMount() {
@@ -28,8 +37,8 @@ class Location extends React.Component {
                     this.props.history.replace('/dashboard')
                 }
                 else {
-                    const { data } = this.props.location.state;
-                    const { location } = data
+                    const { currentUser } = this.props.location.state;
+                    const { location } = currentUser;
                     fetch(`https://api.foursquare.com/v2/venues/explore?client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&v=20180323&limit=3&ll=${location[0]},${location[1]}&sortByDistance=1`)
                         .then(res => res.json())
                         .then(result => {
@@ -48,10 +57,34 @@ class Location extends React.Component {
             .catch(err => this.props.history.replace('/'))
     }
 
+    search() {
+        const { searchQuery } = this.state;
+        const { currentUser } = this.props.location.state;
+        const { location } = currentUser;
+        fetch(`https://api.foursquare.com/v2/venues/search?client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&v=20180323&query=${searchQuery}&ll=${location[0]},${location[1]}&radius=5000`)
+            .then(res => res.json())
+            .then(result => {
+                console.log(result.response.venues)
+                this.setState({ nearByPlaces: result.response.venues })
+            })
+            .catch(err => console.log(err))
+    }
+
+    handleClose() {
+        this.setState({ show: false });
+    }
+
+    handleShow(places) {
+        let { placeLocation } = this.state;
+        placeLocation = [places.location.lat, places.location.lng];
+        this.setState({ show: true, placeLocation });
+    }
+
+
     render() {
-        console.log(this.props)
+        // console.log(this.props)
         console.log(this.state)
-        const { loader, nearByPlaces } = this.state;
+        const { loader, nearByPlaces, userLocation, placeLocation } = this.state;
         return (
             <div>
                 <Navbar>
@@ -73,10 +106,10 @@ class Location extends React.Component {
                         <div style={{ textAlign: 'center' }}>
                             <div className="loc-search-div">
                                 <FormGroup bsSize="large">
-                                    <FormControl type="text" placeholder="Search..." />
+                                    <FormControl type="text" placeholder="Search..." onChange={(e) => this.setState({ searchQuery: e.target.value })} />
                                 </FormGroup>
                             </div>
-                            <div className="loc-search-btn">
+                            <div className="loc-search-btn" onClick={() => this.search()}>
                                 <i className="fa fa-search" style={{ color: 'white', fontSize: '25px' }} ></i>
                             </div>
                         </div>
@@ -99,8 +132,8 @@ class Location extends React.Component {
                                                         <div className="loc-location-div">
                                                             <i className="fa fa-map-marker" style={{ color: 'white', fontSize: '20px' }} ></i>
                                                         </div>
-                                                        <span style={{position:'relative',top:'5px',left:'5px'}}>
-                                                            <p className="loc-para1">
+                                                        <span style={{ position: 'relative', top: '6px', left: '5px' }}>
+                                                            <p className="loc-para1" style={{ fontWeight: 'bold' }}>
                                                                 {places.name}
                                                             </p>
                                                             <p className="loc-para1">
@@ -108,11 +141,8 @@ class Location extends React.Component {
                                                             </p>
                                                         </span>
                                                     </div>
-
-
-
                                                 </td>
-                                                <td><Button bsStyle="primary">map</Button></td>
+                                                <td><Button bsStyle="primary" onClick={() => this.handleShow(places)}>map</Button></td>
                                                 <td><Button bsStyle="info">select</Button></td>
                                             </tr>
                                         )
@@ -121,6 +151,11 @@ class Location extends React.Component {
                                 </tbody>
                             </table>
                         </div>
+                        <Modal show={this.state.show} onHide={this.handleClose} bsSize="large" >
+                            <Modal.Body>
+                                <Direction userLocation={userLocation} placeLocation={placeLocation} />
+                            </Modal.Body>
+                        </Modal>
                     </div>
                 }
 
