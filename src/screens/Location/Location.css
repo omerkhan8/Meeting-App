@@ -38,7 +38,7 @@ table {
   /* Style table headers and table data */
   th, td {
     text-align: center;
-    padding: 16px;
+    padding: 10px;
   }
   
   th:first-child, td:first-child {
