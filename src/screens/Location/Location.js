@@ -83,7 +83,7 @@ class Location extends React.Component {
 
     render() {
         // console.log(this.props)
-        console.log(this.state)
+        // console.log(this.state)
         const { loader, nearByPlaces, userLocation, placeLocation } = this.state;
         return (
             <div>
@@ -153,7 +153,7 @@ class Location extends React.Component {
                         </div>
                         <Modal show={this.state.show} onHide={this.handleClose} bsSize="large" >
                             <Modal.Body>
-                                <Direction userLocation={userLocation} placeLocation={placeLocation} />
+                                <Direction userLocation={userLocation} placeLocation={placeLocation} handleClose={this.handleClose} />
                             </Modal.Body>
                         </Modal>
                     </div>

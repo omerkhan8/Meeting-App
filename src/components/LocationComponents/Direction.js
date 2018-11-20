@@ -3,6 +3,7 @@
 
 import React from 'react';
 import { withGoogleMap, GoogleMap, Marker, DirectionsRenderer, withScriptjs } from "react-google-maps";
+import { Button } from 'react-bootstrap';
 
 class Direction extends React.Component {
 
@@ -39,8 +40,8 @@ class Direction extends React.Component {
     render() {
         const { directions, error } = this.state;
         const { userLocation, placeLocation } = this.props;
-        console.log("userLocation", userLocation)
-        console.log("pleaceLocation", placeLocation)
+        // console.log("userLocation", userLocation)
+        // console.log("pleaceLocation", placeLocation)
         // console.log('workkkkkk')
 
         return (
@@ -56,7 +57,9 @@ class Direction extends React.Component {
                     placeLocation={placeLocation}
                 />
                 <br />
-                <button onClick={this.getDirections}>Get Directions</button>
+                <Button bsStyle="primary" onClick={this.getDirections}>Get Directions</Button>
+                <br/>
+                <Button style={{marginTop:'5px'}} onClick={this.props.handleClose}>Close</Button>
 
             </div>
         )
