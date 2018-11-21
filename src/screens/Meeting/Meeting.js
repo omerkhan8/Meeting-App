@@ -7,7 +7,9 @@ import swal from 'sweetalert2';
 import Geofire from 'geofire';
 import { Alert } from 'react-bootstrap';
 import Loader from 'react-loader-spinner';
-// import Profile from '../Profile/Profile';
+import { connect } from 'react-redux';
+import { requestedUser } from './Actions/MeetingAction';
+
 
 const auth = firebase.auth();
 const toast = swal.mixin({
@@ -75,7 +77,8 @@ class Meeting extends React.Component {
     }
 
     sendMeetingReq(data) {
-        this.props.history.push('/dashboard/meeting/location', { data, currentUser: this.props.location.state.currentUser })
+        this.props.requestedUser(data);
+        this.props.history.push('/dashboard/meeting/location')
     }
 
 
@@ -124,4 +127,18 @@ class Meeting extends React.Component {
     }
 }
 
-export default Meeting;
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        requestedUser: (user) => dispatch(requestedUser(user))
+    }
+}
+
+const mapStateToProps = (state) => {
+    console.log(state)
+    return {
+
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Meeting);

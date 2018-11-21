@@ -10,6 +10,7 @@ const Routes = () => (
             <Route exact path="/dashboard" component={Screens.Dashboard} />
             <Route exact path="/dashboard/meeting" component={Screens.Meeting} />
             <Route path="/dashboard/meeting/location" component={Screens.Location} />
+            <Route path="/dashboard/meeting/calendar" component={Screens.Calendar} />
         </div>
     </Router>
 )

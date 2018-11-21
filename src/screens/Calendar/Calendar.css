@@ -1,0 +1,21 @@
+.cal-calendar-div{
+    text-align: center;
+}
+
+.cal-input-div{
+    width: 330px;
+    margin:0 auto;
+    margin-top: 30px;
+    
+}
+
+
+@media(max-width:360px){
+    .m-input-moment{
+        width: 100% !important;
+    }
+    .cal-input-div{
+        width:100%
+    }
+
+}

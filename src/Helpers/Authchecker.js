@@ -37,7 +37,7 @@ function checkProfile(user) {
                     res('profile not created');
                 }
                 else {
-                    rej('profile created');
+                    rej(snap.val());
                 }
             })
 

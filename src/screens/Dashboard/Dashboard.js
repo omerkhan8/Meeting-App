@@ -6,6 +6,8 @@ import firebase from '../../config/firebase';
 import Loader from 'react-loader-spinner';
 import { Alert } from 'react-bootstrap';
 import swal from 'sweetalert2';
+import { connect } from 'react-redux';
+import { saveUser } from './Actions/DashboardActions';
 
 const db = firebase.database();
 const auth = firebase.auth();
@@ -22,7 +24,8 @@ class Dashboard extends React.Component {
     constructor() {
         super();
         this.state = {
-            meetings: null,
+            meetings: [],
+            meetingUserKeys: [],
             loader: true,
             currUser: null
         }
@@ -43,35 +46,54 @@ class Dashboard extends React.Component {
 
                         this.props.history.replace('/profile');
                     })
-                    .catch(() => {
-                        db.ref(`Users/${user.uid}/Meetings`).once('value')
-                            .then(snap => {
-                                let data = snap.val();
-                                data !== null ?
-                                    this.setState({ meetings: data, loader: false })
-                                    :
-                                    this.setState({ meetings: false, loader: false })
+                    .catch((res) => {
+                        db.ref(`Meetings/${user.uid}/`).on('value', (snapshot) => {
+                            let data = snapshot.val();
+                            if (data !== null) {
+                                console.log(data)
+                                let { meetings, meetingUserKeys } = this.state;
+                                for (let key in data) {
+                                    meetingUserKeys.push(key);
+                                    meetings.push(data[key]);
+                                }
+                                this.setState({ meetings, meetingUserKeys, loader: false })
+                            }
+                            else {
+                                this.setState({ loader: false })
+                            }
 
-                            })
+                        })
 
+                        db.ref(`Requests/${user.uid}/`).on('value', (snapshot) => {
+                            let data = snapshot.val();
+                            if (data !== null) {
+                                let { meetingUserKeys } = this.state;
+                                for (let key in data) {
+                                    meetingUserKeys.push(key);
+                                }
+                                this.setState({ meetingUserKeys })
+                            }
+                        })
+
+                        this.props.saveUser(res);
                     })
             })
             .catch(() => this.props.history.replace('/'))
     }
 
     setMeeting() {
-        const { currUser } = this.state;
+        const { currUser, meetingUserKeys } = this.state;
         firebase.database().ref(`Users`).once('value')
             .then(snap => {
-                console.log(snap.val())
                 let data = snap.val();
                 let currentUser;
                 let allUsers = [];
+                // debugger;
                 for (let key in data) {
                     if (key === currUser) {
                         currentUser = data[key].Profile
                     }
-                    if ("Profile" in data[key] && key !== currUser) {
+                    if ("Profile" in data[key] && key !== currUser && !(meetingUserKeys.includes(key))) {
                         allUsers.push(data[key].Profile)
                     }
                 }
@@ -87,6 +109,7 @@ class Dashboard extends React.Component {
 
     render() {
         const { loader, meetings } = this.state;
+        console.log(this.state)
         return (
             <div>
                 <Navbar>
@@ -102,23 +125,44 @@ class Dashboard extends React.Component {
                     </div>
                 }
                 {
-                    meetings === false &&
+                    meetings.length === 0 && !loader &&
                     <div>
                         <div className="das-alert">
                             <Alert bsStyle="danger">You don't have any meetings yet. Try Creating a new meeting.</Alert>
                         </div>
                     </div>
                 }
-
-                {(meetings === false || meetings) && <div>
-                    <div className="das-meeting-btn" onClick={() => this.setMeeting()} >
-                        <i className="fa fa-calendar-plus-o"></i> Set a Meeting
+                {
+                    meetings.length !== 0 && !loader &&
+                    <div>
+                        <h1>you've meetings</h1>
                     </div>
-                </div>}
+                }
+
+                {!loader &&
+                    <div>
+                        <div className="das-meeting-btn" onClick={() => this.setMeeting()} >
+                            <i className="fa fa-calendar-plus-o"></i> Set a Meeting
+                        </div>
+                    </div>
+                }
 
             </div>
         )
     }
 }
 
-export default Dashboard;
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        saveUser: (user) => dispatch(saveUser(user))
+    }
+}
+
+const mapStateToProps = (state) => {
+    return {
+
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

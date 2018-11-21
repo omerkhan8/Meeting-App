@@ -8,6 +8,7 @@ import { checkUser } from '../../Helpers/Authchecker';
 import Loader from 'react-loader-spinner';
 import { FormGroup, FormControl, Button } from 'react-bootstrap';
 import { Modal } from 'react-bootstrap';
+import { connect } from 'react-redux';
 
 
 const CLIENT_ID = 'ADP2LPQPGPOF2RMVGYEEBSBLS2UI5OG3VJZ13HKIP211ZZXQ';
@@ -23,7 +24,7 @@ class Location extends React.Component {
             nearByPlaces: null,
             searchQuery: null,
             show: false,
-            userLocation: props.location.state.currentUser.location,
+            userLocation: props.currentUser.location,
             placeLocation: null
         }
         this.handleClose = this.handleClose.bind(this);
@@ -33,11 +34,11 @@ class Location extends React.Component {
         checkUser()
             .then(user => {
                 this.setState({ currUser: user.uid })
-                if (!this.props.location.state) {
+                if (!this.props.requestedUser) {
                     this.props.history.replace('/dashboard')
                 }
                 else {
-                    const { currentUser } = this.props.location.state;
+                    const { currentUser } = this.props;
                     const { location } = currentUser;
                     fetch(`https://api.foursquare.com/v2/venues/explore?client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&v=20180323&limit=3&ll=${location[0]},${location[1]}&sortByDistance=1`)
                         .then(res => res.json())
@@ -59,7 +60,7 @@ class Location extends React.Component {
 
     search() {
         const { searchQuery } = this.state;
-        const { currentUser } = this.props.location.state;
+        const { currentUser } = this.props;
         const { location } = currentUser;
         fetch(`https://api.foursquare.com/v2/venues/search?client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&v=20180323&query=${searchQuery}&ll=${location[0]},${location[1]}&radius=5000`)
             .then(res => res.json())
@@ -78,6 +79,10 @@ class Location extends React.Component {
         let { placeLocation } = this.state;
         placeLocation = [places.location.lat, places.location.lng];
         this.setState({ show: true, placeLocation });
+    }
+
+    selectLocation(places) {
+        this.props.history.push('/dashboard/meeting/calendar', { places });
     }
 
 
@@ -143,7 +148,7 @@ class Location extends React.Component {
                                                     </div>
                                                 </td>
                                                 <td><Button bsStyle="primary" onClick={() => this.handleShow(places)}>map</Button></td>
-                                                <td><Button bsStyle="info">select</Button></td>
+                                                <td><Button bsStyle="info" onClick={() => this.selectLocation(places)}>select</Button></td>
                                             </tr>
                                         )
 
@@ -164,4 +169,12 @@ class Location extends React.Component {
     }
 }
 
-export default Location;
+const mapStateToProps = (state) => {
+    console.log(state);
+    return {
+        currentUser: state.DashboardReducer.user,
+        requestedUser: state.MeetingReducer.requestedUser
+    }
+}
+
+export default connect(mapStateToProps)(Location);
