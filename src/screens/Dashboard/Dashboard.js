@@ -1,7 +1,7 @@
 import React from 'react';
 import './Dashboard.css'
 import { checkUser, checkProfile } from '../../Helpers/Authchecker';
-import { Navbar, Dropdown } from '../../components';
+import { Navbar, Dropdown, MeetingList, Popup } from '../../components';
 import firebase from '../../config/firebase';
 import Loader from 'react-loader-spinner';
 import { Alert } from 'react-bootstrap';
@@ -26,6 +26,7 @@ class Dashboard extends React.Component {
         this.state = {
             meetings: [],
             meetingUserKeys: [],
+            popupUsers: [],
             loader: true,
             currUser: null
         }
@@ -51,10 +52,13 @@ class Dashboard extends React.Component {
                             let data = snapshot.val();
                             if (data !== null) {
                                 console.log(data)
-                                let { meetings, meetingUserKeys } = this.state;
+                                let { meetingUserKeys } = this.state;
+                                let meetings = [];
+                                // let meetingUserKeys = []
                                 for (let key in data) {
-                                    meetingUserKeys.push(key);
                                     meetings.push(data[key]);
+                                    if (!meetingUserKeys.includes(key) && data[key].status !== 'Cancelled')
+                                        meetingUserKeys.push(key);
                                 }
                                 this.setState({ meetings, meetingUserKeys, loader: false })
                             }
@@ -68,10 +72,16 @@ class Dashboard extends React.Component {
                             let data = snapshot.val();
                             if (data !== null) {
                                 let { meetingUserKeys } = this.state;
+                                // let meetingUserKeys = [];
+                                let popupUsers = [];
                                 for (let key in data) {
-                                    meetingUserKeys.push(key);
+                                    if (!meetingUserKeys.includes(key))
+                                        meetingUserKeys.push(key);
+                                    if (data[key].showPopup) {
+                                        popupUsers.push(data[key])
+                                    }
                                 }
-                                this.setState({ meetingUserKeys })
+                                this.setState({ meetingUserKeys, popupUsers })
                             }
                         })
 
@@ -108,7 +118,7 @@ class Dashboard extends React.Component {
 
 
     render() {
-        const { loader, meetings } = this.state;
+        const { loader, meetings, popupUsers } = this.state;
         console.log(this.state)
         return (
             <div>
@@ -135,7 +145,7 @@ class Dashboard extends React.Component {
                 {
                     meetings.length !== 0 && !loader &&
                     <div>
-                        <h1>you've meetings</h1>
+                        <MeetingList meetings={meetings} user={'requestedUser'} />
                     </div>
                 }
 
@@ -145,6 +155,11 @@ class Dashboard extends React.Component {
                             <i className="fa fa-calendar-plus-o"></i> Set a Meeting
                         </div>
                     </div>
+                }
+
+                {
+                    popupUsers.length !== 0 && !loader &&
+                    <Popup popupUsers={popupUsers} history={this.props.history} />
                 }
 
             </div>

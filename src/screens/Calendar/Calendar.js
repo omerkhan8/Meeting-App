@@ -78,17 +78,20 @@ class Calendar extends React.Component {
                         requestedUser,
                         choosedPlace: places,
                         choosedTime,
-                        status: 'Pending'
+                        status: 'Pending',
+                        // showPopup: true
                     }
 
                     db.ref(`Meetings/${currentUser.uid}/${requestedUser.uid}`).set(meetingData)
                         .then(res => {
+                            meetingData.showPopup = true;
                             db.ref(`Requests/${requestedUser.uid}/${currentUser.uid}`).set(meetingData)
                                 .then(resp => {
                                     toast({
                                         type: 'success',
                                         title: 'Request sent successfully'
                                     })
+                                    this.props.history.replace('/dashboard');
                                 })
                         })
                 }

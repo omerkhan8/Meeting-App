@@ -11,6 +11,7 @@ const Routes = () => (
             <Route exact path="/dashboard/meeting" component={Screens.Meeting} />
             <Route path="/dashboard/meeting/location" component={Screens.Location} />
             <Route path="/dashboard/meeting/calendar" component={Screens.Calendar} />
+            <Route path="/requests" component={Screens.Request} />
         </div>
     </Router>
 )
