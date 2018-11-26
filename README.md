@@ -2,7 +2,7 @@
 
 ## Introduction
 This is a meeting application created with **React Js** & **Firebase Real time database** the concept is like Tinder, you can set meetings with people who have same interest as yours and there location is at least 5 km from yours.
-(**features**)[Features]
+- (Features)[https://github.com/omerkhan8/Meeting-App#features]
 
 ## Live Preview
 [Let's Meet](https://lets-meetapp.firebaseapp.com/)
