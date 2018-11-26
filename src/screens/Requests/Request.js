@@ -4,7 +4,7 @@ import Loader from 'react-loader-spinner';
 import firebase from '../../config/firebase';
 import { checkUser } from '../../Helpers/Authchecker';
 import swal from 'sweetalert2';
-import { Navbar, Dropdown, MeetingList, Popup, Direction } from '../../components';
+import { Navbar, Dropdown, MeetingList, Direction } from '../../components';
 
 
 const db = firebase.database();

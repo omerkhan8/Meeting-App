@@ -44,7 +44,7 @@ class ResCards extends React.Component {
     responsiveImages() {
 
         let index = this.state.criteriaUsers.length;
-        for (let i = 0; i != index; i++) {
+        for (let i = 0; i !== index; i++) {
             var div = document.getElementById(`check${i}`);
             var img = div.getElementsByTagName('IMG');
             var divs = div.getElementsByTagName('DIV');

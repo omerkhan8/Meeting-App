@@ -44,7 +44,7 @@ class Picture extends React.Component {
     }
 
     submit() {
-        const { imageUrl, imageUploaded, error } = this.state;
+        const { imageUrl, imageUploaded } = this.state;
         let temp = 0;
         for (let images of imageUploaded) {
             if (images) {

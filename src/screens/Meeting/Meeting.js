@@ -1,7 +1,6 @@
 import React from 'react';
 import './Meeting.css';
 import { Navbar, Dropdown, ResCards } from '../../components';
-import firebase from '../../config/firebase';
 import { checkUser, checkProfile } from '../../Helpers/Authchecker';
 import swal from 'sweetalert2';
 import Geofire from 'geofire';
@@ -10,8 +9,6 @@ import Loader from 'react-loader-spinner';
 import { connect } from 'react-redux';
 import { requestedUser } from './Actions/MeetingAction';
 
-
-const auth = firebase.auth();
 const toast = swal.mixin({
     toast: true,
     position: 'top-end',

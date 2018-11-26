@@ -6,7 +6,6 @@ import Logo1 from '../../images/mylogo1.png';
 import { Modal } from 'react-bootstrap';
 import firebase from '../../config/firebase';
 import swal from 'sweetalert2';
-import { checkUser } from '../../Helpers/Authchecker';
 
 
 var provider = new firebase.auth.FacebookAuthProvider();
@@ -38,14 +37,6 @@ class Home extends React.Component {
 
     componentDidMount() {
         this.SlierDiv.firstChild.style.backgroundColor = '#333';
-
-        // document.getElementById('slidshow-parent').firstChild.style.backgroundColor = '#333';
-        // auth.onAuthStateChanged(user => {
-        //     if (user) {
-        //         this.props.history.replace('/dashboard');
-        //     }
-        // })
-
     }
 
 

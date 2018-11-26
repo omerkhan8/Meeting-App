@@ -10,7 +10,6 @@ import { connect } from 'react-redux';
 import { saveUser } from './Actions/DashboardActions';
 
 const db = firebase.database();
-const auth = firebase.auth();
 const toast = swal.mixin({
     toast: true,
     position: 'top-end',

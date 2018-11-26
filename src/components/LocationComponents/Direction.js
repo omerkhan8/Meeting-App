@@ -38,7 +38,7 @@ class Direction extends React.Component {
     }
 
     render() {
-        const { directions, error } = this.state;
+        const { directions } = this.state;
         const { userLocation, placeLocation } = this.props;
         // console.log("userLocation", userLocation)
         // console.log("pleaceLocation", placeLocation)
@@ -58,8 +58,8 @@ class Direction extends React.Component {
                 />
                 <br />
                 <Button bsStyle="primary" onClick={this.getDirections}>Get Directions</Button>
-                <br/>
-                <Button style={{marginTop:'5px'}} onClick={this.props.handleClose}>Close</Button>
+                <br />
+                <Button style={{ marginTop: '5px' }} onClick={this.props.handleClose}>Close</Button>
 
             </div>
         )
